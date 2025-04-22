@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kannada Text to Image Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Add this in the head section -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Kannada Text to Image Creator</h1>
+        
+        <div class="editor-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="text-input">Enter Kannada Text:</label>
+                    <textarea id="text-input" placeholder="ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ..."></textarea>
+                </div>
+                
+                <div class="control-group">
+                    <label for="font-size">Font Size:</label>
+                    <input type="range" id="font-size" min="20" max="100" value="40">
+                    <span id="font-size-value">40px</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="font-weight">Font Weight:</label>
+                    <select id="font-weight">
+                        <option value="400">Regular</option>
+                        <option value="500">Medium</option>
+                        <option value="600">Semi-Bold</option>
+                        <option value="700" selected>Bold</option>
+                        <option value="800">Extra Bold</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>Background Color:</label>
+                    <div class="accent-colors" id="bg-accent-colors">
+                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
+                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
+                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                        <div class="accent-color" data-color="#34495e" style="background-color: #34495e;"></div>
+                        <div class="accent-color" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ddd;"></div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label>Text Color:</label>
+                    <div class="accent-colors" id="text-accent-colors">
+                        <div class="accent-color" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ddd;"></div>
+                        <div class="accent-color" data-color="#000000" style="background-color: #000000;"></div>
+                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
+                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
+                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label>Footer Bar Color:</label>
+                    <div class="accent-colors" id="footer-accent-colors">
+                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
+                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
+                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                        <div class="accent-color" data-color="#34495e" style="background-color: #34495e;"></div>
+                        <div class="accent-color" data-color="#000000" style="background-color: #000000;"></div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="image-size">Image Size:</label>
+                    <select id="image-size">
+                        <option value="square">Square (1:1) - 1080x1080</option>
+                        <option value="portrait">Portrait (4:5) - 1080x1350</option>
+                        <option value="landscape">Landscape (16:9) - 1080x608</option>
+                        <option value="twitter">Twitter (2:1) - 1200x600</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="logo-upload">Upload Logo:</label>
+                    <input type="file" id="logo-upload" accept="image/*">
+                </div>
+                
+                <div class="control-group">
+                    <label for="logo-size">Logo Size:</label>
+                    <input type="range" id="logo-size" min="30" max="200" value="80">
+                    <span id="logo-size-value">80px</span>
+                </div>
+                
+                <div class="control-group">
+                    <div class="button-group">
+                        <button id="generate-btn">Generate Image</button>
+                        <button id="download-btn" disabled>Download Image</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="preview-container">
+                <div id="image-preview">
+                    <div id="text-content">ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ</div>
+                    <div id="footer-bar">
+                        <img id="logo-preview" alt="Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
