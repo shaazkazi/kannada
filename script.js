@@ -20,12 +20,76 @@ document.addEventListener('DOMContentLoaded', function() {
     const footerBar = document.getElementById('footer-bar');
     const logoPreview = document.getElementById('logo-preview');
     
+    // Create paste button
+    const pasteButton = document.createElement('button');
+    pasteButton.type = 'button';
+    pasteButton.id = 'paste-btn';
+    pasteButton.className = 'paste-button';
+    pasteButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            <path d="M9 12h6"></path>
+            <path d="M12 9v6"></path>
+        </svg>
+        <span>Paste</span>
+    `;
+    
+    // Insert paste button after text input
+    textInput.parentNode.insertBefore(pasteButton, textInput.nextSibling);
+    
+    // Add event listener for paste button
+    pasteButton.addEventListener('click', async function() {
+        try {
+            const text = await navigator.clipboard.readText();
+            textInput.value = text;
+            // Trigger input event to update preview
+            textInput.dispatchEvent(new Event('input'));
+            
+            // Show success animation
+            pasteButton.classList.add('paste-success');
+            setTimeout(() => {
+                pasteButton.classList.remove('paste-success');
+            }, 1000);
+        } catch (err) {
+            // Show error animation
+            pasteButton.classList.add('paste-error');
+            setTimeout(() => {
+                pasteButton.classList.remove('paste-error');
+            }, 1000);
+            
+            // Fallback for browsers that don't support clipboard API
+            textInput.focus();
+            alert('Please use Ctrl+V or Command+V to paste text');
+        }
+    });
+    
     // Default values
     let bgColor = '#3498db';
     let textColor = '#ffffff';
     let footerColor = '#2980b9';
     let logoImage = null;
+    let defaultLogoImage = null;
     let currentImageUrl = null; // Store the current image URL for download
+    
+    // Load default logo
+    const defaultLogo = new Image();
+    defaultLogo.onload = function() {
+        defaultLogoImage = defaultLogo.src;
+        logoPreview.src = defaultLogoImage;
+        logoPreview.style.display = 'block';
+        
+        // Set initial logo size based on footer height
+        const footerHeight = parseFloat(getComputedStyle(footerBar).height);
+        const logoHeight = footerHeight * 0.99; // 99% of footer height
+        logoSizeInput.value = Math.round(logoHeight);
+        logoSizeValue.textContent = `${Math.round(logoHeight)}px`;
+        logoPreview.style.height = `${Math.round(logoHeight)}px`;
+    };
+    defaultLogo.onerror = function() {
+        console.warn('Default logo could not be loaded');
+    };
+    defaultLogo.src = 'images/logo.png';
     
     // Initialize accent color selectors
     initAccentColors(bgAccentColors, 'bg', '#3498db');
@@ -108,6 +172,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update text content bottom margin to account for larger footer
         textContent.style.bottom = `${footerHeight}px`;
+        
+        // Update logo size to fit footer
+        if (logoPreview.src) {
+            const logoHeight = footerHeight * 0.7; // 70% of footer height
+            logoSizeInput.value = Math.round(logoHeight);
+            logoSizeValue.textContent = `${Math.round(logoHeight)}px`;
+            logoPreview.style.height = `${Math.round(logoHeight)}px`;
+        }
     }
     
     function updateImageSize() {
@@ -147,6 +219,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 logoImage = event.target.result;
                 logoPreview.src = logoImage;
                 logoPreview.style.display = 'block';
+                
+                // Update logo size to fit footer
+                updateFooterHeight();
             };
             
             reader.readAsDataURL(file);
@@ -272,14 +347,17 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadBtn.disabled = false;
         }
         
+        // Determine which logo to use
+        const logoSrc = logoImage || defaultLogoImage;
+        
         // Draw logo if available
-        if (logoImage) {
+        if (logoSrc) {
             const logoImg = new Image();
             
             logoImg.onload = function() {
                 const logoSize = parseInt(logoSizeInput.value, 10);
                 
-                // Limit logo height to 70% of footer height to prevent overflow
+                // Limit logo height to 99% of footer height to prevent overflow
                 const maxLogoHeight = footerHeight * 0.99;
                 let logoHeight = logoSize;
                 
@@ -300,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 finalizeImage();
             };
             
-            logoImg.src = logoImage;
+            logoImg.src = logoSrc;
         } else {
             finalizeImage();
         }
