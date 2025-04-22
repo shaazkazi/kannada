@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize preview
     updatePreview();
+    updateFooterHeight();
     
     // Functions
     function initAccentColors(container, type, defaultColor) {
@@ -99,6 +100,16 @@ document.addEventListener('DOMContentLoaded', function() {
         logoPreview.style.height = `${size}px`;
     }
     
+    function updateFooterHeight() {
+        // Update the footer height to 15% of the preview container
+        const previewHeight = imagePreview.offsetWidth * (parseFloat(imagePreview.style.paddingBottom) / 100);
+        const footerHeight = previewHeight * 0.15;
+        footerBar.style.height = `${footerHeight}px`;
+        
+        // Update text content bottom margin to account for larger footer
+        textContent.style.bottom = `${footerHeight}px`;
+    }
+    
     function updateImageSize() {
         const size = imageSizeSelect.value;
         let aspectRatio;
@@ -121,6 +132,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         imagePreview.style.paddingBottom = aspectRatio;
+        
+        // Update footer height when image size changes
+        updateFooterHeight();
     }
     
     function handleLogoUpload(e) {
@@ -176,8 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, width, height);
         
-        // Draw footer bar
-        const footerHeight = Math.round(height * 0.06); // 6% of image height
+        // Draw footer bar - now 15% of image height
+        const footerHeight = Math.round(height * 0.15);
         ctx.fillStyle = footerColor;
         ctx.fillRect(0, height - footerHeight, width, footerHeight);
         
@@ -212,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         lines.push(currentLine);
         
-        // Calculate vertical position for text
+        // Calculate vertical position for text - adjust for larger footer
         const textAreaHeight = height - footerHeight;
         const textY = textAreaHeight / 2 - (lines.length - 1) * lineHeight / 2;
         
@@ -265,8 +279,8 @@ document.addEventListener('DOMContentLoaded', function() {
             logoImg.onload = function() {
                 const logoSize = parseInt(logoSizeInput.value, 10);
                 
-                // Limit logo height to 80% of footer height to prevent overflow
-                const maxLogoHeight = footerHeight * 0.8;
+                // Limit logo height to 70% of footer height to prevent overflow
+                const maxLogoHeight = footerHeight * 0.99;
                 let logoHeight = logoSize;
                 
                 // Scale down logo if it's too large
