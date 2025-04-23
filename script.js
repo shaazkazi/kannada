@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const fontSizeInput = document.getElementById('font-size');
     const fontSizeValue = document.getElementById('font-size-value');
     const fontWeightSelect = document.getElementById('font-weight');
-    const bgAccentColors = document.getElementById('bg-accent-colors');
-    const textAccentColors = document.getElementById('text-accent-colors');
-    const footerAccentColors = document.getElementById('footer-accent-colors');
     const imageSizeSelect = document.getElementById('image-size');
     const logoUpload = document.getElementById('logo-upload');
     const logoSizeInput = document.getElementById('logo-size');
@@ -70,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let footerColor = '#2980b9';
     let logoImage = null;
     let defaultLogoImage = null;
+    let defaultLogoLoaded = false;
     let currentImageUrl = null; // Store the current image URL for download
     
     // Load default logo
@@ -78,23 +76,20 @@ document.addEventListener('DOMContentLoaded', function() {
         defaultLogoImage = defaultLogo.src;
         logoPreview.src = defaultLogoImage;
         logoPreview.style.display = 'block';
+        defaultLogoLoaded = true;
         
         // Set initial logo size based on footer height
         const footerHeight = parseFloat(getComputedStyle(footerBar).height);
-        const logoHeight = footerHeight * 0.99; // 99% of footer height
+        const logoHeight = footerHeight * 0.7; // 70% of footer height
         logoSizeInput.value = Math.round(logoHeight);
         logoSizeValue.textContent = `${Math.round(logoHeight)}px`;
         logoPreview.style.height = `${Math.round(logoHeight)}px`;
     };
     defaultLogo.onerror = function() {
         console.warn('Default logo could not be loaded');
+        defaultLogoLoaded = false;
     };
     defaultLogo.src = 'images/logo.png';
-    
-    // Initialize accent color selectors
-    initAccentColors(bgAccentColors, 'bg', '#3498db');
-    initAccentColors(textAccentColors, 'text', '#ffffff');
-    initAccentColors(footerAccentColors, 'footer', '#2980b9');
     
     // Event listeners
     textInput.addEventListener('input', updatePreview);
@@ -110,45 +105,96 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Color picker functionality
+    const colorTabButtons = document.querySelectorAll('.color-tab-button');
+    const colorTabs = document.querySelectorAll('.color-tab');
+    const colorOptions = document.querySelectorAll('.color-option');
+
+    // Tab switching
+    colorTabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and tabs
+            colorTabButtons.forEach(btn => btn.classList.remove('active'));
+            colorTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding tab
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
+
+    // Color selection
+    colorOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Remove selected class from all options
+            colorOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.setAttribute('aria-checked', 'false');
+                opt.setAttribute('tabindex', '-1');
+            });
+            
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            option.setAttribute('aria-checked', 'true');
+            option.setAttribute('tabindex', '0');
+            
+            // Get color values
+            bgColor = option.getAttribute('data-bg');
+            textColor = option.getAttribute('data-text');
+            footerColor = option.getAttribute('data-footer');
+            
+            // Update preview colors
+            imagePreview.style.backgroundColor = bgColor;
+            textContent.style.color = textColor;
+            footerBar.style.backgroundColor = footerColor;
+        });
+    });
+
+    // Keyboard navigation for color options
+    colorOptions.forEach(option => {
+        option.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                option.click();
+            }
+        });
+    });
+
+    // Set initial selected color
+    // Find the first color option and select it if none is selected
+    if (!document.querySelector('.color-option.selected')) {
+        const firstOption = document.querySelector('.color-option');
+        if (firstOption) {
+            firstOption.click();
+        }
+    }
+    
     // Initialize preview
     updatePreview();
+    updateImageSize(); // Set initial image size
     updateFooterHeight();
     
     // Functions
-    function initAccentColors(container, type, defaultColor) {
-        const colors = container.querySelectorAll('.accent-color');
-        
-        colors.forEach(color => {
-            const colorValue = color.getAttribute('data-color');
-            
-            if (colorValue === defaultColor) {
-                color.classList.add('selected');
-            }
-            
-            color.addEventListener('click', () => {
-                // Remove selected class from all colors in this container
-                colors.forEach(c => c.classList.remove('selected'));
-                
-                // Add selected class to clicked color
-                color.classList.add('selected');
-                
-                // Update color variable based on type
-                if (type === 'bg') {
-                    bgColor = colorValue;
-                    imagePreview.style.backgroundColor = bgColor;
-                } else if (type === 'text') {
-                    textColor = colorValue;
-                    textContent.style.color = textColor;
-                } else if (type === 'footer') {
-                    footerColor = colorValue;
-                    footerBar.style.backgroundColor = footerColor;
-                }
-            });
-        });
-    }
-    
     function updatePreview() {
-        textContent.textContent = textInput.value || 'ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ';
+        // Get the text from the input
+        const inputText = textInput.value || 'ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ';
+        
+        // Clear previous content
+        textContent.innerHTML = '';
+        
+        // Split text by line breaks and create paragraph elements
+        const paragraphs = inputText.split('\n');
+        
+        paragraphs.forEach(paragraph => {
+            const p = document.createElement('p');
+            p.textContent = paragraph;
+            p.style.margin = '0';
+            p.style.padding = '0';
+            textContent.appendChild(p);
+        });
+        
+        // Apply font weight
         textContent.style.fontWeight = fontWeightSelect.value;
     }
     
@@ -156,6 +202,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const size = fontSizeInput.value;
         fontSizeValue.textContent = `${size}px`;
         textContent.style.fontSize = `${size}px`;
+        
+        // Ensure text stays within bounds
+        adjustTextPosition();
+    }
+    
+    function adjustTextPosition() {
+        // Get the text content's actual height
+        const textHeight = textContent.scrollHeight;
+        const containerHeight = imagePreview.clientHeight;
+        const footerHeight = parseFloat(getComputedStyle(footerBar).height);
+        const availableHeight = containerHeight - footerHeight;
+        
+        // If text is too large, adjust padding to fit
+        if (textHeight > availableHeight) {
+            const topPadding = Math.max(10, (availableHeight - textHeight) / 2);
+            textContent.style.paddingTop = `${topPadding}px`;
+        } else {
+            // Center text vertically
+            textContent.style.paddingTop = '0';
+        }
     }
     
     function updateLogoSize() {
@@ -165,12 +231,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateFooterHeight() {
+        // Make sure paddingBottom is set before calculating
+        if (!imagePreview.style.paddingBottom) {
+            imagePreview.style.paddingBottom = '100%'; // Default to square
+        }
+        
         // Update the footer height to 15% of the preview container
-        const previewHeight = imagePreview.offsetWidth * (parseFloat(imagePreview.style.paddingBottom) / 100);
+        const previewWidth = imagePreview.offsetWidth;
+        const aspectRatio = parseFloat(imagePreview.style.paddingBottom) / 100;
+        const previewHeight = previewWidth * aspectRatio;
         const footerHeight = previewHeight * 0.15;
+        
         footerBar.style.height = `${footerHeight}px`;
         
-        // Update text content bottom margin to account for larger footer
+        // Update text content bottom margin to account for footer
         textContent.style.bottom = `${footerHeight}px`;
         
         // Update logo size to fit footer
@@ -180,7 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
             logoSizeValue.textContent = `${Math.round(logoHeight)}px`;
             logoPreview.style.height = `${Math.round(logoHeight)}px`;
         }
+        
+        // Adjust text position to ensure it stays within bounds
+        adjustTextPosition();
     }
+    
     
     function updateImageSize() {
         const size = imageSizeSelect.value;
@@ -198,6 +276,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             case 'twitter':
                 aspectRatio = '50%'; // 2:1
+                break;
+            case 'instagram':
+                aspectRatio = '100%'; // 1:1 for Instagram
+                break;
+            case 'instagramreel':
+                aspectRatio = '177.8%'; // 9:16 for Instagram Reel
                 break;
             default:
                 aspectRatio = '100%';
@@ -228,6 +312,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function restorePreview() {
+        // Reset the preview to its original state
+        imagePreview.innerHTML = `
+            <div id="text-content"></div>
+            <div id="footer-bar">
+                <img id="logo-preview" alt="Logo">
+            </div>
+        `;
+        
+        // Update references to the new elements
+        textContent = document.getElementById('text-content');
+        footerBar = document.getElementById('footer-bar');
+        logoPreview = document.getElementById('logo-preview');
+        
+        // Restore styles and content
+        imagePreview.style.backgroundColor = bgColor;
+        imagePreview.style.height = '';
+        imagePreview.style.paddingBottom = '100%'; // Default to square
+        
+        footerBar.style.backgroundColor = footerColor;
+        textContent.style.color = textColor;
+        textContent.style.fontWeight = fontWeightSelect.value;
+        textContent.style.fontSize = `${fontSizeInput.value}px`;
+        
+        // Restore logo
+        if (logoImage) {
+            logoPreview.src = logoImage;
+        } else if (defaultLogoImage) {
+            logoPreview.src = defaultLogoImage;
+        }
+        logoPreview.style.display = 'block';
+        
+        // Update sizes
+        updateImageSize();
+        updatePreview();
+        
+        // Disable download button
+        downloadBtn.disabled = true;
+    }
+    
     function generateImage() {
         // Create a canvas element
         const canvas = document.createElement('canvas');
@@ -253,6 +377,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 width = 1200;
                 height = 600;
                 break;
+            case 'instagram':
+                width = 1080;
+                height = 1080;
+                break;
+            case 'instagramreel':
+                width = 1080;
+                height = 1920;
+                break;
             default:
                 width = 1080;
                 height = 1080;
@@ -266,9 +398,10 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillRect(0, 0, width, height);
         
         // Draw footer bar - now 15% of image height
-        const footerHeight = Math.round(height * 0.15);
-        ctx.fillStyle = footerColor;
-        ctx.fillRect(0, height - footerHeight, width, footerHeight);
+const footerHeight = Math.round(height * 0.15); // Ensure this matches the CSS percentage
+ctx.fillStyle = footerColor;
+ctx.fillRect(0, height - footerHeight, width, footerHeight);
+
         
         // Draw text
         const text = textInput.value || 'ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ';
@@ -280,30 +413,47 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
-        // Handle text wrapping
+        // Handle text wrapping and line breaks
         const maxWidth = width * 0.8; // 80% of image width
-        const lineHeight = fontSize * 1.2;
-        const words = text.split(' ');
+        const lineHeight = fontSize * 1.3;
+        
+        // Split text by line breaks first
+        const paragraphs = text.split('\n');
         const lines = [];
-        let currentLine = words[0];
         
-        for (let i = 1; i < words.length; i++) {
-            const testLine = currentLine + ' ' + words[i];
-            const metrics = ctx.measureText(testLine);
-            
-            if (metrics.width > maxWidth) {
-                lines.push(currentLine);
-                currentLine = words[i];
-            } else {
-                currentLine = testLine;
+        // Process each paragraph for word wrapping
+        paragraphs.forEach(paragraph => {
+            if (paragraph.trim() === '') {
+                // Add empty line for paragraph breaks
+                lines.push('');
+                return;
             }
-        }
-        
-        lines.push(currentLine);
+            
+            const words = paragraph.split(' ');
+            let currentLine = words[0];
+            
+            for (let i = 1; i < words.length; i++) {
+                const testLine = currentLine + ' ' + words[i];
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            
+            lines.push(currentLine);
+        });
         
         // Calculate vertical position for text - adjust for larger footer
         const textAreaHeight = height - footerHeight;
-        const textY = textAreaHeight / 2 - (lines.length - 1) * lineHeight / 2;
+        const totalTextHeight = lines.length * lineHeight;
+        let textY = (textAreaHeight / 2) - (totalTextHeight / 2) + (lineHeight / 2);
+        
+        // Ensure text doesn't overflow at the top
+        textY = Math.max(fontSize / 2, textY);
         
         // Draw each line of text
         lines.forEach((line, index) => {
@@ -343,6 +493,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             imagePreview.appendChild(previewContainer);
             
+            // Add a reset button to restore the preview
+            const resetButton = document.createElement('button');
+            resetButton.type = 'button';
+            resetButton.className = 'reset-preview-button';
+            resetButton.innerHTML = 'Reset Preview';
+            resetButton.style.position = 'absolute';
+            resetButton.style.bottom = '10px';
+            resetButton.style.right = '10px';
+            resetButton.style.zIndex = '10';
+            resetButton.style.padding = '8px 12px';
+            resetButton.style.fontSize = '12px';
+            resetButton.style.opacity = '0.8';
+            
+            resetButton.addEventListener('click', function() {
+                restorePreview();
+                previewContainer.remove();
+                resetButton.remove();
+            });
+            
+            previewContainer.appendChild(resetButton);
+            
             // Enable download button
             downloadBtn.disabled = false;
         }
@@ -358,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const logoSize = parseInt(logoSizeInput.value, 10);
                 
                 // Limit logo height to 99% of footer height to prevent overflow
-                const maxLogoHeight = footerHeight * 0.99;
+                const maxLogoHeight = footerHeight * 0.9;
                 let logoHeight = logoSize;
                 
                 // Scale down logo if it's too large
@@ -375,6 +546,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
                 
+                finalizeImage();
+            };
+            
+            logoImg.onerror = function() {
+                console.warn('Failed to load logo for canvas');
                 finalizeImage();
             };
             

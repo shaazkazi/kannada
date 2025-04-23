@@ -6,7 +6,7 @@
     <title>Kannada Text to Image Creator</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Add this in the head section -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -38,87 +38,210 @@
                 </div>
                 
                 <div class="control-group">
-                    <label>Background Color:</label>
-                    <div class="accent-colors" id="bg-accent-colors">
-                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
-                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
-                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
-                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
-                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
-                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
-                        <div class="accent-color" data-color="#34495e" style="background-color: #34495e;"></div>
-                        <div class="accent-color" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ddd;"></div>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label>Text Color:</label>
-                    <div class="accent-colors" id="text-accent-colors">
-                        <div class="accent-color" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ddd;"></div>
-                        <div class="accent-color" data-color="#000000" style="background-color: #000000;"></div>
-                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
-                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
-                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
-                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
-                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
-                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label>Footer Bar Color:</label>
-                    <div class="accent-colors" id="footer-accent-colors">
-                        <div class="accent-color" data-color="#3498db" style="background-color: #3498db;"></div>
-                        <div class="accent-color" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
-                        <div class="accent-color" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
-                        <div class="accent-color" data-color="#f39c12" style="background-color: #f39c12;"></div>
-                        <div class="accent-color" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
-                        <div class="accent-color" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
-                        <div class="accent-color" data-color="#34495e" style="background-color: #34495e;"></div>
-                        <div class="accent-color" data-color="#000000" style="background-color: #000000;"></div>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="image-size">Image Size:</label>
-                    <select id="image-size">
-                        <option value="square">Square (1:1) - 1080x1080</option>
-                        <option value="portrait">Portrait (4:5) - 1080x1350</option>
-                        <option value="landscape">Landscape (16:9) - 1080x608</option>
-                        <option value="twitter">Twitter (2:1) - 1200x600</option>
-                    </select>
-                </div>
-                
-                <div class="control-group">
-                    <label for="logo-upload">Upload Logo:</label>
-                    <input type="file" id="logo-upload" accept="image/*">
-                </div>
-                
-                <div class="control-group">
-                    <label for="logo-size">Logo Size:</label>
-                    <input type="range" id="logo-size" min="30" max="200" value="80">
-                    <span id="logo-size-value">80px</span>
-                </div>
-                
-                <div class="control-group">
-                    <div class="button-group">
-                        <button id="generate-btn">Generate Image</button>
-                        <button id="download-btn" disabled>Download Image</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="preview-container">
-                <div id="image-preview">
-                    <div id="text-content">ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ</div>
-                    <div id="footer-bar">
-                        <img id="logo-preview" alt="Logo">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
-</html>
+                    <label>Color Theme:</label>
+                    <div class="color-picker-container">
+                        <div class="color-picker-tabs">
+                            <button class="color-tab-button active" id="popular-tab-button" data-tab="popular" role="tab" aria-selected="true">Popular</button>
+                            <button class="color-tab-button" id="elegant-tab-button" data-tab="elegant" role="tab" aria-selected="false">Elegant</button>
+                            <button class="color-tab-button" id="bold-tab-button" data-tab="bold" role="tab" aria-selected="false">Bold</button>
+                            <button class="color-tab-button" id="soft-tab-button" data-tab="soft" role="tab" aria-selected="false">Soft</button>
+                        </div>
+                        
+                        <div class="color-options">
+                            <!-- Popular Tab -->
+                            <div class="color-tab active" id="popular-tab" data-tab-content="popular" role="tabpanel" aria-labelledby="popular-tab-button">
+                                <div class="color-option" data-bg="#ffffff" data-text="#333333" data-footer="#f0f0f0" role="radio" aria-checked="true" tabindex="0">
+                                    <div class="color-preview" style="background: #ffffff; color: #333333">Aa</div>
+                                    <span>Classic</span>
+                                </div>
+                                <div class="color-option" data-bg="#1a1a2e" data-text="#ffffff" data-footer="#0f0f1a" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #1a1a2e; color: #ffffff">Aa</div>
+                                    <span>Dark</span>
+                                </div>
+                                <div class="color-option" data-bg="#4cc9f0" data-text="#1a1a2e" data-footer="#3a9dc0" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #4cc9f0; color: #1a1a2e">Aa</div>
+                                    <span>Sky</span>
+                                </div>
+                                <div class="color-option" data-bg="#f72585" data-text="#ffffff" data-footer="#c01e69" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #f72585; color: #ffffff">Aa</div>
+                                    <span>Pink</span>
+                                </div>
+                                <div class="color-option" data-bg="#ffbe0b" data-text="#3a0ca3" data-footer="#e6ac0a" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #ffbe0b; color: #3a0ca3">Aa</div>
+                                    <span>Vibrant</span>
+                                </div>
+                                <div class="color-option" data-bg="#8ecae6" data-text="#023047" data-footer="#70a1bc" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #8ecae6; color: #023047">Aa</div>
+                                    <span>Ocean</span>
+                                </div>
+                                <div class="color-option" data-bg="#2a9d8f" data-text="#ffffff" data-footer="#1f756b" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #2a9d8f; color: #ffffff">Aa</div>
+                                    <span>Teal</span>
+                                </div>
+                                <div class="color-option" data-bg="#e9c46a" data-text="#264653" data-footer="#d4b14e" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #e9c46a; color: #264653">Aa</div>
+                                    <span>Gold</span>
+                                </div>
+                                <div class="color-option" data-bg="#ff6f61" data-text="#ffffff" data-footer="#e55a4d" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #ff6f61; color: #ffffff">Aa</div>
+                                    <span>Coral</span>
+                                </div>
+                                <div class="color-option" data-bg="#00b4d8" data-text="#ffffff" data-footer="#0090ad" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #00b4d8; color: #ffffff">Aa</div>
+                                    <span>Bright Cyan</span>
+                                </div>
+                                <div class="color-option" data-bg="#f77f00" data-text="#ffffff" data-footer="#d66e00" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #f77f00; color: #ffffff">Aa</div>
+                                    <span>Orange Flame</span>
+                                </div>
+                                <div class="color-option" data-bg="#9d4edd" data-text="#ffffff" data-footer="#7e3eb2" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #9d4edd; color: #ffffff">Aa</div>
+                                    <span>Violet Pop</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Elegant Tab -->
+                            <div class="color-tab" id="elegant-tab" data-tab-content="elegant" role="tabpanel" aria-labelledby="elegant-tab-button">
+                                <div class="color-option" data-bg="#1C1C1E" data-text="#FFFFFF" data-footer="#0f0f10" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #1C1C1E; color: #FFFFFF">Aa</div>
+                                    <span>Dark Charcoal</span>
+                                </div>
+                                <div class="color-option" data-bg="#F5F5F5" data-text="#1A1A1A" data-footer="#e0e0e0" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #F5F5F5; color: #1A1A1A">Aa</div>
+                                    <span>Light Gray</span>
+                                </div>
+                                <div class="color-option" data-bg="#222831" data-text="#EEEEEE" data-footer="#15191f" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #222831; color: #EEEEEE">Aa</div>
+                                    <span>Slate Black</span>
+                                </div>
+                                <div class="color-option" data-bg="#FAFAFA" data-text="#2E2E2E" data-footer="#e6e6e6" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #FAFAFA; color: #2E2E2E">Aa</div>
+                                    <span>Almost White</span>
+                                </div>
+                                <div class="color-option" data-bg="#2B2B2B" data-text="#D6D6D6" data-footer="#1a1a1a" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #2B2B2B; color: #D6D6D6">Aa</div>
+                                    <span>Charcoal</span>
+                                </div>
+                                <div class="color-option" data-bg="#F1F1F1" data-text="#1C1C1C" data-footer="#d9d9d9" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #F1F1F1; color: #1C1C1C">Aa</div>
+                                    <span>Neutral Gray</span>
+                                </div>
+                                <div class="color-option" data-bg="#3e3e3e" data-text="#f9f9f9" data-footer="#2a2a2a" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #3e3e3e; color: #f9f9f9">Aa</div>
+                                    <span>Slate Elegance</span>
+                                </div>
+                                <div class="color-option" data-bg="#ececec" data-text="#2a2a2a" data-footer="#d4d4d4" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #ececec; color: #2a2a2a">Aa</div>
+                                    <span>Platinum</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Bold Tab -->
+                            <div class="color-tab" id="bold-tab" data-tab-content="bold" role="tabpanel" aria-labelledby="bold-tab-button">
+                                <div class="color-option" data-bg="#0F0F0F" data-text="#00FFE0" data-footer="#070707" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #0F0F0F; color: #00FFE0">Aa</div>
+                                    <span>Black/Aqua</span>
+                                </div>
+                                <div class="color-option" data-bg="#1E1E2F" data-text="#F9F9F9" data-footer="#13131e" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #1E1E2F; color: #F9F9F9">Aa</div>
+                                    <span>Midnight Blue</span>
+                                </div>
+                                <div class="color-option" data-bg="#101820" data-text="#FEE715" data-footer="#090e12" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #101820; color: #FEE715">Aa</div>
+                                    <span>Navy/Yellow</span>
+                                </div>
+                                <div class="color-option" data-bg="#2C3A47" data-text="#F8EFBA" data-footer="#1c252e" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #2C3A47; color: #F8EFBA">Aa</div>
+                                    <span>Steel/Gold</span>
+                                </div>
+                                <div class="color-option" data-bg="#ff0054" data-text="#ffffff" data-footer="#cc0043" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #ff0054; color: #ffffff">Aa</div>
+                                    <span>Neon Pink</span>
+                                </div>
+                                <div class="color-option" data-bg="#6a0dad" data-text="#f8f8f8" data-footer="#4c0a7a" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #6a0dad; color: #f8f8f8">Aa</div>
+                                    <span>Purple Blaze</span>
+                                </div>
+                                <div class="color-option" data-bg="#ffbd00" data-text="#1a1a1a" data-footer="#cc9700" role="radio" aria-checked="false" tabindex="-1">
+                                    <div class="color-preview" style="background: #ffbd00; color: #1a1a1a">Aa</div>
+                                    <span>Sun Gold</span>
+                                </div>
+                            </div>
+                            
+                                                        <!-- Soft Tab -->
+                                                        <div class="color-tab" id="soft-tab" data-tab-content="soft" role="tabpanel" aria-labelledby="soft-tab-button">
+                                                            <div class="color-option" data-bg="#FFEFEF" data-text="#333333" data-footer="#f5d6d6" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #FFEFEF; color: #333333">Aa</div>
+                                                                <span>Blush Pink</span>
+                                                            </div>
+                                                            <div class="color-option" data-bg="#E8F6EF" data-text="#1C1C1C" data-footer="#d0e8de" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #E8F6EF; color: #1C1C1C">Aa</div>
+                                                                <span>Mint Cream</span>
+                                                            </div>
+                                                            <div class="color-option" data-bg="#DDE6ED" data-text="#27374D" data-footer="#c4d0da" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #DDE6ED; color: #27374D">Aa</div>
+                                                                <span>Soft Blue-Gray</span>
+                                                            </div>
+                                                            <div class="color-option" data-bg="#F7EFE5" data-text="#3F3F3F" data-footer="#e9dac7" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #F7EFE5; color: #3F3F3F">Aa</div>
+                                                                <span>Warm Beige</span>
+                                                            </div>
+                                                            <div class="color-option" data-bg="#F3E9DD" data-text="#3E3E3E" data-footer="#e5d4be" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #F3E9DD; color: #3E3E3E">Aa</div>
+                                                                <span>Warm Cream</span>
+                                                            </div>
+                                                            <div class="color-option" data-bg="#E4DCCF" data-text="#2B2B2B" data-footer="#d0c5b4" role="radio" aria-checked="false" tabindex="-1">
+                                                                <div class="color-preview" style="background: #E4DCCF; color: #2B2B2B">Aa</div>
+                                                                <span>Soft Taupe</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="control-group">
+                                                <label for="image-size">Image Size:</label>
+                                                <select id="image-size">
+                                                    <option value="square">Square (1:1) - 1080x1080</option>
+                                                    <option value="portrait">Portrait (4:5) - 1080x1350</option>
+                                                    <option value="landscape">Landscape (16:9) - 1080x608</option>
+                                                    <option value="twitter">Twitter (2:1) - 1200x600</option>
+                                                    <option value="instagram">Instagram (1:1) - 1080x1080</option>
+                                                    <option value="instagramreel">Instagram Reel (9:16) - 1080x1920</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="control-group">
+                                                <label for="logo-upload">Upload Logo:</label>
+                                                <input type="file" id="logo-upload" accept="image/*">
+                                            </div>
+                                            
+                                            <div class="control-group">
+                                                <label for="logo-size">Logo Size:</label>
+                                                <input type="range" id="logo-size" min="30" max="200" value="80">
+                                                <span id="logo-size-value">80px</span>
+                                            </div>
+                                            
+                                            <div class="control-group">
+                                                <div class="button-group">
+                                                    <button id="generate-btn">Generate Image</button>
+                                                    <button id="download-btn" disabled>Download Image</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="preview-container">
+                                            <div id="image-preview">
+                                                <div id="text-content">ಇಲ್ಲಿ ನಿಮ್ಮ ಕನ್ನಡ ಪಠ್ಯ ಕಾಣಿಸುತ್ತದೆ</div>
+                                                <div id="footer-bar">
+                                                    <img id="logo-preview" alt="Logo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <script src="script.js"></script>
+                            </body>
+                            </html>
+                            
